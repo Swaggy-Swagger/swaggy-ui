@@ -5,7 +5,7 @@ on:
     branches:
       - master
     types:
-      - closed  # PR이 master에 머지될 때만
+      - closed  # PR이 master에 병합될 때만
 
 jobs:
   sync_files:
@@ -19,32 +19,6 @@ jobs:
       run: |
         npm install        # 또는 yarn install
         npm run build      # 또는 yarn build
-
-    # Configure Git with PR Author
-    - name: Configure Git with PR Author
-      run: |
-        if [[ "${{ github.event.pull_request.merged }}" == 'true' ]]; then
-          git config --global user.name "${{ github.event.pull_request.user.login }}"
-          git config --global user.email "${{ github.event.pull_request.user.login }}@users.noreply.github.com"
-        fi
-
-    # Commit with PR Author info
-    - name: Amend Commit with Author Info
-      run: |
-        if [[ "${{ github.event.pull_request.merged }}" == 'true' ]]; then
-          git commit --amend --no-edit --author="${{ github.event.pull_request.user.login }} <${{ github.event.pull_request.user.login }}@users.noreply.github.com>"
-          git push origin main --force
-          echo "Git user.name: $(git config user.name)"
-        fi
-
-    # Commit with PR Title as Message
-    - name: Commit with PR Title as Message
-      run: |
-        if [[ "${{ github.event.pull_request.merged }}" == 'true' ]]; then
-          git commit --amend --no-edit --author="${{ github.event.pull_request.user.login }} <${{ github.event.pull_request.user.login }}@users.noreply.github.com>"
-          git commit -m "${{ github.event.pull_request.title }}"
-          git push origin main --force
-        fi
 
     - name: Sync Files to Backend Repository
       run: |
@@ -77,3 +51,4 @@ jobs:
 
     env:
       GITHUB_TOKEN: ${{ secrets.PAT }}
+
