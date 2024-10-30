@@ -42,7 +42,7 @@ jobs:
           git branch -M style/ui
           git fetch origin style/ui
 
-          # Merge changes and override conflicts with ours --allow-unrelated-histories
+          # Merge changes and override conflicts with ours
           git merge -X ours origin/style/ui
 
           # Push the changes to the style/ui branch
